@@ -1,3 +1,6 @@
+create database todolist;
+create role todo_user with superuser login password 'qwerty';
+
 create table users (
 	id serial not null unique,
 	name varchar(255) not null,

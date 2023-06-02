@@ -1,6 +1,7 @@
 package main
 
 import (
+	_"github.com/lib/pq"
 	"github.com/VladMak/auto_learn/internal/domain"
 	"github.com/VladMak/auto_learn/internal/handler"
 	"github.com/VladMak/auto_learn/internal/repository"
@@ -14,7 +15,19 @@ func main() {
 		log.Fatalf("Error initializing configs: %s", err.Error())
 	}
 
-	repos := repository.NewRepository()
+	db, err := repository.NewPostgresDB(repository.Config{
+		Host: viper.GetString("db.host"),
+		Port: viper.GetString("db.port"),
+		Username: viper.GetString("db.username"),
+		Password: viper.GetString("db.password"),
+		DBName: viper.GetString("db.dbname"),
+		SSLMode: viper.GetString("db.sslmode"),
+	})
+	if err != nil {
+		log.Fatalf("failed to initialized db: %s", err.Error())
+	}
+
+	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
