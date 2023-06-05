@@ -6,13 +6,14 @@ import (
 	"github.com/VladMak/auto_learn/internal/handler"
 	"github.com/VladMak/auto_learn/internal/repository"
 	"github.com/VladMak/auto_learn/internal/service"
-	"log"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := initConfig(); err != nil {
-		log.Fatalf("Error initializing configs: %s", err.Error())
+		logrus.Fatalf("Error initializing configs: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -24,7 +25,7 @@ func main() {
 		SSLMode: viper.GetString("db.sslmode"),
 	})
 	if err != nil {
-		log.Fatalf("failed to initialized db: %s", err.Error())
+		logrus.Fatalf("failed to initialized db: %s", err.Error())
 	}
 
 	repos := repository.NewRepository(db)
@@ -33,7 +34,7 @@ func main() {
 
 	srv := new(domain.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		log.Fatal("error occured while running http server: %s", err.Error())
+		logrus.Fatal("error occured while running http server: %s", err.Error())
 	}
 }
 
