@@ -1,3 +1,6 @@
+create database auto_learn;
+create role "service.auto_learn" with superuser login password 'qwerty';
+
 CREATE TABLE Users (
   user_id SERIAL PRIMARY KEY,
   username VARCHAR(255) NOT NULL,

@@ -30,6 +30,7 @@ type Repository struct {
 	Authorization
 	TodoList
 	TodoItem
+	Apartments
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -37,5 +38,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Authorization: NewAuthPostgres(db),
 		TodoList: NewTodoListPostgres(db),
 		TodoItem: NewTodoItemPostgres(db),
+		Apartments: NewApartmentsPostgres(db),
 	}
 }
